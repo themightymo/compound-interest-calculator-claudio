@@ -1,0 +1,732 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>Debt Reduction Calculator</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/checkout/">
+
+    <!-- Bootstrap core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet"  >
+
+    <!-- Favicons -->
+<link rel="apple-touch-icon" href="/docs/4.4/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+<link rel="icon" href="/docs/4.4/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/docs/4.4/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="manifest" href="/docs/4.4/assets/img/favicons/manifest.json">
+<link rel="mask-icon" href="/docs/4.4/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
+<link rel="icon" href="/docs/4.4/assets/img/favicons/favicon.ico">
+<meta name="msapplication-config" content="/docs/4.4/assets/img/favicons/browserconfig.xml">
+<meta name="theme-color" content="#563d7c">
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+	  
+	  .widget-area {
+		  border: 1px solid #efefef;
+		padding: 20px;
+		height: auto;
+		background: #fbfbfb;
+		border-radius: 10px;
+		-moz-border-radius: 10px;
+		-webkit-border-radius: 10px;
+		margin-bottom: 20px;
+		margin:0px auto;
+		background-color: #f6f6f6;
+		border-color: #cdcdcd;
+		width: 800px;
+	  }
+	  
+	  #chartdiv {
+		  width: 100%;
+		  height: 500px;
+		}
+		
+		#results {
+		  width: 100%;
+		  padding:25px 50px;
+		  background: #ddd;
+		}
+		
+		.rounded-box.results-box {
+    background-color: #fcfcfc;
+    border-color: #dedede;
+    color: #333333;
+}
+.rounded-box {
+    border: 1px solid #efefef;
+    padding: 20px;
+    height: auto;
+	width: 100%;
+    background: #fbfbfb;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    margin-bottom: 20px;
+}
+		
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="form-validation.css" rel="stylesheet">
+  </head>
+  <body class="">
+    <div class="container">
+  <div class="py-2 text-center">
+    
+    <h2>Debt Reduction Calculator</h2>
+    
+  </div>
+
+  <div class="row">
+  <div class="widget-area">
+    <div class="col-md-12 order-md-1 widget-area">
+      <h4 class="mb-3"></h4>
+      <form class="needs-validation" novalidate>
+        <div class="row">
+		
+          <div class="col-md-12 mb-3">
+            <label for="loan_amount">Amount Owed</label>
+			  <div class="input-group">
+				<div class="input-group-prepend">
+				  <span class="input-group-text">$</span>
+				</div>
+				<input type="text" class="form-control" id="loan_amount"  required value="1000.00">			
+			  </div>
+          </div>
+		  
+          <div class="col-md-12 mb-3">
+			 <label for="rate">Annual Interest Rate (APR):</label>
+			  <div class="input-group">				
+				<input type="text" class="form-control" id="rate"  required value="5.000">
+				<div class="input-group-prepend">
+				  <span class="input-group-text">%</span>
+				</div>
+			  </div>
+          </div>
+		  
+          <div class="col-md-12 mb-3">
+            <label for="monthly_payment">Your Current Monthly Payment:</label>
+			  <div class="input-group">
+				<div class="input-group-prepend">
+				  <span class="input-group-text">$</span>
+				</div>
+				<input type="text" class="form-control" id="monthly_payment"  required value="100.00">
+			  </div>
+          </div>
+		  
+		  <div class="col-md-12 mb-3">
+            <label for="added_amount">Amount You Can Add To Current Payment:</label>
+			  <div class="input-group">
+				<div class="input-group-prepend">
+				  <span class="input-group-text">$</span>
+				</div>
+				<input type="text" class="form-control" id="added_amount"  required value="20.00">
+			
+			  </div>
+          </div>
+		  
+         
+		  
+        </div>
+
+      
+        <hr class="mb-4">
+        <button class="btn btn-primary btn-lg btn-block" type="button" id="calculate">Calculate</button>
+      </form>
+    </div>
+	
+	
+	 <div class="row mt-3">
+			 <div class="widget-area rounded-box results-box text-center" style="display:none;">
+			 
+
+	<div class="widget-area rounded-box positive-balance"> 
+	
+	  If you add <span class="added_amount_result"></span> to your monthly payment, 
+	  you will pay off this debt in <span class="n_revised_result"></span> payments instead of <span class="n_result"></span>, 
+	  and you will save $<span class="interest_saving_result"></span> in interest charges. 
+	  This savings translates into a guaranteed, tax-free, average annual return of 5.00%. 
+	  And that's not even considering the emotional returns you'll get when you pay off this debt 
+	  <span class="time_reduction_result"></span>-months (0.00 years, <span class="time_reduction_result"></span> months) ahead of schedule!
+	
+	  </div>
+	  
+	  <div class="col-md-12 mb-3">
+            <label for="username">Current Payoff Term (Months):</label>
+			 
+				<input type="text" class="form-control" id="n"  readonly >
+          </div>
+		  
+		   <div class="col-md-12 mb-3">
+            <label for="username">Revised Payoff Term (Months):</label>
+			 
+				<input type="text" class="form-control" id="n_revised"  readonly>
+          </div>
+		  
+		   <div class="col-md-12 mb-3">
+            <label for="username">Time Reduction (Months):</label>
+			 
+				<input type="text" class="form-control" id="time_reduction" readonly>
+          </div>
+		  
+		  <div class="col-md-12 mb-3">
+            <label for="username">Current Interest Cost:</label>
+			 
+				<input type="text" class="form-control" id="total_interest" readonly>
+          </div>
+		  
+		  <div class="col-md-12 mb-3">
+            <label for="username">Revised Interest Cost:</label>
+			 
+				<input type="text" class="form-control" id="revised_interest" readonly>
+          </div>
+		  
+		  <div class="col-md-12 mb-3">
+            <label for="username">Total Interest Savings:</label>
+			 
+				<input type="text" class="form-control" id="interest_saving" readonly>
+          </div>
+			   
+				 
+			 <!-- HTML -->
+<div id="chartdiv"></div>
+			 
+			 <hr>
+		  
+		  <h2>Amortization Schedule</h2>  
+		  <nav>
+			  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+				<a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-monthly" role="tab" aria-controls="nav-monthly" aria-selected="false">Monthly Amortization</a>
+				
+			  </div>
+			</nav>
+			<div class="tab-content" id="nav-tabContent">
+			
+			  <div class="tab-pane fade show active" id="nav-monthly" role="tabpanel" aria-labelledby="nav-monthly-tab">
+			 			
+				  <div class="table-outer table-rounded table-responsive">
+					<table class="table">
+					  <thead>
+						<tr>
+						  <th>Month</th>
+						  <th>Principal</th>
+						  <th>Interest</th>
+						  <th>Total Paid</th>
+						  <th>Balance</th>
+						</tr>
+					  </thead>
+					  <tbody class="table-monthly">
+						
+					  </tbody>
+					  
+					</table>
+				  </div>
+			  
+			  </div>
+			  
+</div>
+       
+		
+	 </div>	
+		
+
+	</div>
+	
+  </div>
+</div>
+
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy; 2020 Company Name</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="#">Privacy</a></li>
+      <li class="list-inline-item"><a href="#">Terms</a></li>
+      <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+  </footer>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+      <script>window.jQuery || document.write('<script src="js/vendor/jquery.slim.min.js"><\/script>')</script>
+	 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+		
+		
+<!-- Resources -->
+<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<script src="https://www.amcharts.com/lib/3/serial.js"></script>
+<script src="https://www.amcharts.com/lib/3/plugins/dataloader/dataloader.min.js"></script>
+
+<script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />		
+		
+		
+	
+<!-- Calculation code -->
+<script>
+
+  //const monthNames = ["January", "February", "March", "April", "May", "June",
+  //"July", "August", "September", "October", "November", "December"];
+  
+   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10){
+        dd='0'+dd;
+    } 
+    if(mm<10){
+        mm='0'+mm;
+    } 
+
+    today = yyyy+'-'+mm+'-'+dd;                
+   // document.getElementById("date").defaultValue =today+"";
+
+
+    $(document).on('click', '#calculate', function(){ 
+	
+	   var loan_amount = $("#loan_amount").val();
+	
+	   var rate = $("#rate").val();
+	   
+	   var added_amount = $("#added_amount").val();
+	   
+	  // var start_date = $("#start_date").val(); 
+	   
+	   var P = loan_amount;  // Loan Amount , Principal
+	   
+	   var M = $("#monthly_payment").val();
+	   
+	   var r = ((rate/100)/12)
+	  
+	   //var n = term*12;
+
+	   var factor = 1+r;
+	   
+	   /*
+	   var factor_pow = Math.pow(factor, n);
+	   
+	   var top_calc = r*factor_pow;
+	   var down_calc = factor_pow-1;
+	   
+	   var M = P*(top_calc/down_calc);  // Amortization Monthly
+	*/
+	   var I = P * r;
+	   
+	   var term_up = 1-((r*P)/M);
+	   term_up = Math.log(term_up);
+	   term_up *= -1;
+	   var term_down = Math.log(factor);
+	   var n = (term_up/term_down);
+	   n = Math.trunc(n);
+	   n +=1;
+       
+	   var revised_M =  +M  +  +added_amount;	   
+	  
+	   var term_up_revised = 1-((r*P)/revised_M);
+	   term_up_revised = Math.log(term_up_revised);
+       term_up_revised *= -1;
+	   var term_down_revised = Math.log(factor);
+	   var n_revised = (term_up_revised/term_down_revised);
+	   n_revised = Math.trunc(n_revised);
+	   n_revised +=1;
+	   
+	   //alert(n_revised);
+	   
+	   $("#n").val(n);
+	   $("#n_revised").val(n_revised);
+	   
+	   var time_reduction = n - n_revised;
+	   $("#time_reduction").val(time_reduction);
+	   $(".time_reduction_result").html(time_reduction);
+	   
+	   $(".n_result").html(n);
+	   $(".n_revised_result").html(n_revised);
+	   
+	   var term = n/12;
+	   //M = M.toFixed(2);
+	   
+	  // alert(M);
+	 
+	    //var date_init =  $("#date").val();
+	    var d = new Date();
+		var year = d.getFullYear();
+		var month = d.getMonth();
+		var day = d.getDate();
+		
+		var d2 = new Date();
+		var year = d2.getFullYear();
+		var month = d2.getMonth();
+		var day = d2.getDate();
+		
+var term_year = term;		
+		
+var endyear = +year + +term_year;
+
+//var stop_pmi = purchase_price * 0.78;
+
+var endmonth = monthNames[d.getMonth()];
+
+  /***********   display results  **********/
+  
+	    $(".results-box").css('display','block');
+		
+		$(".added_amount_result").html("$"+added_amount);
+		
+		$("#monthly_payment_result").html("<h3> $"+M+"</h3>");
+		
+		$("#loan_amount_result").html("<h3>$ "+P+"</h3>");
+		
+		$("#over_payments_result").html("<b>over "+n+" payments</b>");
+		
+		$("#total_interest_result").html("<b>"+I+"</b>");
+		
+		$("#payoff_date_result").html("<h4>"+endmonth+' '+endyear+"</h4>");
+	   
+	     
+var total_paid = '';
+//var toDate = c.toISOString().slice(0, 10);
+
+
+
+
+var c_dataArr = [];
+var i = 1;
+var html = '';
+var html1 = '';
+var k=0;
+var jsonArr = [];
+d.setMonth(d.getMonth() + 1);
+
+P = loan_amount;
+i=1;
+var dataArr = [];
+
+while (i <= n_revised)
+{
+ 
+   var Interest = P * r;
+   
+   var Principal = revised_M - Interest;   
+   
+   var Balance = P - Principal;
+   
+   total_paid = Principal + Interest;
+   
+   var toDate = d.toISOString().slice(0, 10);
+   
+   if(Balance<0){
+      Principal = +Principal + +Balance;
+	   total_paid = Principal + Interest;
+      Balance = 0.00;
+	  
+   }
+   
+    var toDate = d.toISOString().slice(0, 10);
+	var table_date = new Date(toDate);	
+	var month_name 	= monthNames[table_date.getMonth()];
+  
+   dataArr.push({
+                "date": d.toISOString().slice(0, 10),
+                "principal": Principal.toFixed(2),
+				"interest": Interest.toFixed(2),
+				"total_paid": total_paid.toFixed(2),
+				"balance": Balance.toFixed(2),
+				"month":month_name
+				
+            });
+			
+			console.log(dataArr);
+			
+	
+	
+	var year_number = table_date.getFullYear();
+	var format_date = month_name +' '+ year_number;
+			
+    html += '<tr><td>' + format_date + '</td> <td>$' + dataArr[k].principal + '</td><td>$' + dataArr[k].interest + '</td><td>$' + dataArr[k].total_paid + '</td><td>$' + dataArr[k].balance + '</td></tr>'; 			
+	
+	d.setMonth(d.getMonth() + 1);
+	
+	i++;
+	
+	k++;
+	
+	P = Balance;
+	
+}
+
+$('.table-monthly').append(html);
+
+//console.log(dataArr);
+
+var total_interest = 0;
+for(var j=0;j<n_revised;j++){
+
+    total_interest += +dataArr[j].interest;
+	
+}
+
+ total_interest =  total_interest.toFixed(2);
+ $("#revised_interest_result").html("<h4>$ "+total_interest+"</h4>");
+ $("#revised_interest").val(total_interest);
+
+ 
+ var total_paid_all = 0;
+for(var j=0;j<n_revised;j++){
+
+    total_paid_all += +dataArr[j].total_paid;
+	
+}
+
+ total_paid_all =  total_paid_all.toFixed(2);
+ $("#total_paid").html("<h4>$ "+total_paid_all+"</h4>");
+
+
+d2.setMonth(d.getMonth() + 1);
+i=1;
+P=loan_amount;
+while (i <= n)
+{
+ 
+   var Interest_current = P * r;
+  
+   var Principal = M - Interest_current;   
+   
+   var Balance = P - Principal;
+   
+   total_paid = Principal + Interest_current;
+   
+  // var toDate = d.toISOString().slice(0, 10);
+  
+  if(Balance<0){
+      Principal = +Principal + +Balance;
+	  total_paid = Principal + Interest;
+      Balance = 0.00;
+	  
+   }
+  
+   c_dataArr.push({
+            //    "date": d2.toISOString().slice(0, 10),
+            //    "principal": Principal.toFixed(2),
+				"interest_current": Interest_current.toFixed(2)
+			//	"total_paid": total_paid.toFixed(2),
+			//	"balance": Balance.toFixed(2)
+				
+            });
+		/*	
+	var table_date = new Date(c_dataArr[k].date);	
+	var month_name 	= monthNames[table_date.getMonth()];
+	var year_number = table_date.getFullYear();
+	var format_date = month_name +' '+ year_number;
+			*/
+    //html1 += '<tr><td>' + format_date + '</td> <td>$' + c_dataArr[k].principal + '</td><td>$' + c_dataArr[k].interest + '</td><td>$' + c_dataArr[k].total_paid + '</td><td>$' + c_dataArr[k].balance + '</td></tr>'; 			
+	
+	d2.setMonth(d2.getMonth() + 1);
+	
+	i++;
+	
+	k++;
+	
+	P = Balance;
+	
+}
+
+console.log(c_dataArr);
+var total_interest1 = 0;
+for(var j=0;j<n;j++){
+
+    total_interest1 += +c_dataArr[j].interest_current;
+	
+}
+
+ total_interest1 =  total_interest1.toFixed(2);
+ $("#total_interest_result").html("<h4>$ "+total_interest1+"</h4>");
+ $("#total_interest").val(total_interest1);
+
+
+var interest_saving = total_interest1 - total_interest;
+$("#interest_saving").val(interest_saving);
+$(".interest_saving_result").html(interest_saving);
+ 
+	var principal = 0;
+	var interest = 0;
+	var balance = 0;
+	var total_paid_yearly = 0;
+    
+	   while(year <= endyear)
+	   {
+	        
+			var k = 0;
+			principal = 0;
+			balance = 0;
+			interest = 0;
+	        total_paid_yearly = 0;
+			
+		    while(k<n_revised)
+			{
+			
+			current_date = new Date(dataArr[k].date);
+			current_year = current_date.getFullYear();
+			
+			
+			  // alert(current_date);
+			
+				if(current_year == year)
+				{
+				principal += +dataArr[k].principal;
+				interest += +dataArr[k].interest;
+				total_paid_yearly += +dataArr[k].total_paid;
+				balance = +dataArr[k].balance;
+				
+				//alert(dataArr[k].balance+'--'+balance+'-'+current_year);
+				}
+	
+			k++;
+			}
+		
+       jsonArr.push({
+                
+                "principal": principal.toFixed(2),
+				"interest": interest.toFixed(2),
+                "total_paid_yearly": total_paid_yearly.toFixed(2),
+				"balance": balance.toFixed(2),
+				"year": year
+				
+            });		 
+		
+		year++;
+		}
+	            
+
+console.log(jsonArr);
+var html2 = '';	
+for(var z=0;z<jsonArr.length;z++){
+
+html2 += '<tr><td>' + jsonArr[z].year + '</td> <td>$' + jsonArr[z].principal + '</td><td>$' + jsonArr[z].interest + '</td><td>$' + jsonArr[z].total_paid_yearly + '</td><td>$' + jsonArr[z].balance + '</td></tr>'; 					
+}
+		
+//$('.table-yearly').append(html2);
+
+var chart = AmCharts.makeChart("chartdiv", {
+    "type": "serial",
+  "theme": "none",
+    "legend": {
+        "horizontalGap": 10,
+        "maxColumns": 1,
+        "position": "top",
+    "useGraphSettings": true,
+    "markerSize": 10
+    },
+    "dataProvider":dataArr,
+  
+	"valueAxes": [{
+    "id": "v1",
+    "title": "Payments",
+    "position": "right",
+    "stackType": "regular",
+    "axisAlpha": 0.3,
+    "gridAlpha": 0,
+	"legendValueText": "$[[value]]M",
+	"unit": "$"
+	
+  }, {
+    "id": "v2",
+    "title": "Balance",
+    "gridAlpha": 0,
+    "position": "left",
+    "autoGridCount": false,
+	"legendValueText": "$[[value]]",
+	"unit": "$"
+	
+  }],
+
+    "graphs": [{
+        "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>$ [[value]]</b></span>",
+		"valueAxis": "v1",
+        "fillAlphas": 0.8,
+        "labelText": "[[value]]",
+        "lineAlpha": 0.3,
+        "title": "Principal",
+        "type": "column",
+    "color": "#000000",
+	"fillColors": "#0F4802",
+	"legendValueText": "$[[value]]M",
+        "valueField": "principal"
+    }, {
+        "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>$ [[value]]</b></span>",
+		"valueAxis": "v1",
+        "fillAlphas": 0.8,
+        "labelText": "[[value]]",
+        "lineAlpha": 0.3,
+        "title": "Interest",
+        "type": "column",
+    "color": "#000000",
+	"fillColors": "#F19C36",
+	"legendValueText": "$[[value]]M",
+        "valueField": "interest"
+    },
+	{
+    "id": "graph2",
+    "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>$ [[value]]</span> [[additional]]</span>",
+	"valueAxis": "v2",
+    "bullet": "round",
+    "lineThickness": 3,
+    "bulletSize": 7,
+    "bulletBorderAlpha": 1,
+	"fillColors": "#000000",
+    "bulletColor": "#FFFFFF",
+    "useLineColorForBulletBorder": true,
+    "bulletBorderThickness": 3,
+    "fillAlphas": 0,
+    "lineAlpha": 1,
+    "title": "Balance",
+	"legendValueText": "$[[value]]M",
+    "valueField": "balance",
+    "dashLengthField": "dashLengthLine"
+  }],
+    "categoryField": "month",
+    "categoryAxis": {
+        "gridPosition": "start",
+        "axisAlpha": 0,
+        "gridAlpha": 0,
+        "position": "left"
+    },
+    "export": {
+    	"enabled": true
+     }
+
+});
+
+});  // calculate btn
+
+</script>
+
+<!-- Chart code -->
+
+
+
+
+		
+		</body>
+</html>
