@@ -1,2 +1,2 @@
 # compound-interest-calculator-claudio
-Compound interest calculator html from Claudio
+Chart.js Debt Reduction Calculator With Amortization Schedule calculator html from Claudio
